@@ -1,4 +1,3 @@
-#include <errno.h>
 #include <getopt.h>
 #include <locale.h>
 #include <stdio.h>
@@ -6,47 +5,28 @@
 #include <string.h>
 #include <unistd.h>
 
-/*
-    Função para utilidade futura: obtém as primeiras letras de cada palavra do arquivo.
-*/
-void getFirstLetter(char *fileName) {
-	FILE *message;
-	char c;
-
-	if(!(message = fopen(strcat(fileName, ".txt"), "r"))) {
-		/* caso o arquivo não exista */
-		fprintf(stderr, "ERRO: %s \"%s\": %s\n", "Nao foi possivel abrir o arquivo", fileName, strerror(errno));
-		exit(1);
-	}
-
-	c = fgetc(message);
-
-	printf("%c\n", c);
-	while(c != EOF) {
-		if(c == ' ') {
-			printf("%c\n", fgetc(message));
-		}
-		c = fgetc(message);
-	}
-	fclose(message);
-}
+#include "cifrador.h"
 
 int main(int argc, char **argv) {
 	int option;
-	char *fileFormatted;
+	FILE *livroCifra;
 	int e = 0, d = 0;
-	char *m, *b, *i;
+	char *m = 0;
+	char *b = 0;
+	char *i = 0;
 
 	opterr = 0;
 
-	setlocale(LC_ALL, "pt_BR.UTF-8");
-
+	setlocale(LC_CTYPE, "");
 	// Verifica se há mais de 1 argumento
 	if(argc == 1) {
 		fprintf(stderr, "ERRO: %s", "é necessário mais argumentos.\n");
 		exit(1);
 	}
 
+	/*
+	 * NOTA: necessario revisar as opções e suas saídas. 
+	*/
 	while((option = getopt(argc, argv, "edb:m:i:")) != -1) {
 		switch(option) {
 		// encode flag
@@ -66,15 +46,22 @@ int main(int argc, char **argv) {
 			if(strncmp(optarg, "-", 1) != 0) {
 				m = malloc(sizeof((char *)optarg) + 1);
 				m = strcpy(m, optarg);
-				getFirstLetter(m);
+
 				break;
 			}
+
 		// -b recebe o LivroCifra
 		case 'b':
 			if(strncmp(optarg, "-", 1) != 0) {
-				b = malloc(sizeof((char *)optarg) + 1);
+				if(!(livroCifra = fopen(strcat(optarg, ".ascii"), "r"))) {
+					fprintf(stderr, "ERRO: %s \"%s\": %s\n", "Nao foi possivel abrir/criar o arquivo", optarg, strerror(errno));
+					exit(1);
+				}
+
+				b = malloc(sizeof((char *)optarg)+6);
 				b = strcpy(b, optarg);
-				getFirstLetter(b);
+				cifrador(livroCifra);
+				fclose(livroCifra);
 				break;
 			}
 		// -i recebe a mensagem codificada
@@ -82,7 +69,6 @@ int main(int argc, char **argv) {
 			if(strncmp(optarg, "-", 1) != 0) {
 				i = malloc(sizeof((char *)optarg) + 1);
 				i = strcpy(i, optarg);
-				getFirstLetter(i);
 				break;
 			}
 		// Argumento inválido
@@ -98,6 +84,7 @@ int main(int argc, char **argv) {
 	}
 
 	// print dos argumentos
+	printf("Resultado dos argumentos:\n");
 	printf("arg -m: %s\n", m);
 	printf("arg -b: %s\n", b);
 	printf("arg -i: %s\n", i);
@@ -105,5 +92,6 @@ int main(int argc, char **argv) {
 	printf("arg -e: %d\n", e);
 	printf("arg -d: %d\n", d);
 
+	free(b);
 	exit(0);
 }
