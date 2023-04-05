@@ -7,8 +7,8 @@
  * Cria uma lista vazia e a retorna, se falhar retorna NULL.
  */
 
-lista_t* lista_cria() {
-	lista_t* l;
+lista_t *lista_cria() {
+	lista_t *l;
 
 	/*Testando o malloc*/
 	if(!(l = (lista_t*)malloc(sizeof(lista_t))))
@@ -24,7 +24,7 @@ lista_t* lista_cria() {
  * Remove todos os elementos da lista, libera espaco e retorna NULL.
  */
 
-lista_t* lista_destroi(lista_t* l) {
+lista_t *lista_destroi(lista_t *l) {
 	int elem;
 
 	/* A função retirar do início da free em todos os nodos,
@@ -42,7 +42,7 @@ lista_t* lista_destroi(lista_t* l) {
  * Retorna 1 se a lista esta vazia e 0 caso contrario.
  */
 
-int lista_vazia(lista_t* l) {
+int lista_vazia(lista_t *l) {
 	if(lista_tamanho(l) != 0)
 		return 0;
 
@@ -53,7 +53,7 @@ int lista_vazia(lista_t* l) {
  * Retorna o tamanho da lista, isto eh, o numero de elementos presentes nela.
  */
 
-int lista_tamanho(lista_t* l) {
+int lista_tamanho(lista_t *l) {
 	return l->tamanho;
 }
 
@@ -61,7 +61,7 @@ int lista_tamanho(lista_t* l) {
  * Insere o elemento no inicio da lista.
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
  */
-int lista_insere_inicio(lista_t* l, int elemento) {
+int lista_insere_inicio(lista_t *l, int elemento) {
 	nodo_l_t* NewNodo;
 
 	/*Testando o malloc*/
@@ -82,9 +82,9 @@ int lista_insere_inicio(lista_t* l, int elemento) {
  * Insere o elemento no final da lista.
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
  */
-int lista_insere_fim(lista_t* l, int elemento) {
-	nodo_l_t* NodoAtual;
-	nodo_l_t* NewNode;
+int lista_insere_fim(lista_t *l, int elemento) {
+	nodo_l_t *NodoAtual;
+	nodo_l_t *NewNode;
 
 	/*Testando o malloc*/
 	if(!(NewNode = (nodo_l_t*)malloc(sizeof(nodo_l_t))))
@@ -113,9 +113,9 @@ int lista_insere_fim(lista_t* l, int elemento) {
 
 /* Ordena a lista e retorna a mesma */
 
-lista_t* ordena_lista(lista_t* l) {
-	nodo_l_t* NodoAtual;
-	nodo_l_t* Aux = NULL;
+lista_t *ordena_lista(lista_t* l) {
+	nodo_l_t *NodoAtual;
+	nodo_l_t *Aux = NULL;
 	int temp;
 
 	NodoAtual = l->ini;
@@ -143,7 +143,7 @@ lista_t* ordena_lista(lista_t* l) {
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
  */
 
-int lista_insere_ordenado(lista_t* l, int elemento) {
+int lista_insere_ordenado(lista_t *l, int elemento) {
 	/* Para garantir isso, podemos simplesmente inserir
 	 * no final e ordenar depois */
 
@@ -158,8 +158,8 @@ int lista_insere_ordenado(lista_t* l, int elemento) {
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
  */
 
-int lista_retira_inicio(lista_t* l, int* elemento) {
-	nodo_l_t* temp;
+int lista_retira_inicio(lista_t *l, int *elemento) {
+	nodo_l_t *temp;
 	temp = l->ini;
 
 	if(lista_vazia(l))
@@ -182,8 +182,8 @@ int lista_retira_inicio(lista_t* l, int* elemento) {
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
  */
 
-int lista_retira_fim(lista_t* l, int* elemento) {
-	nodo_l_t* NodoAtual;
+int lista_retira_fim(lista_t *l, int *elemento) {
+	nodo_l_t *NodoAtual;
 
 	if(lista_vazia(l))
 		return 0;
@@ -217,8 +217,8 @@ int lista_retira_fim(lista_t* l, int* elemento) {
  * Se o elemento nao for encontrado na lista tambem retorna 0.
  */
 
-int lista_retira_elemento(lista_t* l, int* elemento) {
-	nodo_l_t* NodoAtual;
+int lista_retira_elemento(lista_t *l, int *elemento) {
+	nodo_l_t *NodoAtual;
 	NodoAtual = l->ini;
 	int elem;
 	elem = *elemento;
@@ -252,8 +252,8 @@ int lista_retira_elemento(lista_t* l, int* elemento) {
 /*
  * Retorna 1 se o elemento existe na lista e 0 caso contrario.
  */
-int lista_pertence(lista_t* l, int elemento) {
-	nodo_l_t* NodoAtual;
+int lista_pertence(lista_t *l, int elemento) {
+	nodo_l_t *NodoAtual;
 
 	if(lista_vazia(l))
 		return 0;
@@ -285,26 +285,25 @@ int lista_pertence(lista_t* l, int elemento) {
  * Esta funcao eh somente para facilitar teus testes.
  * Normalmente ela nao existe nas implementacoes de um TAD lista.
  */
-void lista_imprime(lista_t* l) {
-	nodo_l_t* NodoAtual;
-
+void lista_imprime(FILE *arq, lista_t *l) {
+	nodo_l_t *NodoAtual;
 	NodoAtual = l->ini;
 
 	if(lista_vazia(l) == 0) {
 		while(NodoAtual->prox != NULL) {
 			printf("%d ", NodoAtual->elemento);
+			fprintf(arq, "%d ", NodoAtual->elemento);
 			NodoAtual = NodoAtual->prox;
 		}
 
 		/* Imprimindo o último elemento da lista */
 		printf("%d", NodoAtual->elemento);
+		fprintf(arq, "%d\n", NodoAtual->elemento);
 	}
-    printf("\n");
+	printf("\n");
 }
 
-
 /*******************FUNÇÕES DAS LISTAS DE CHAVES/CARACTERES*****************/
-
 
 /*
  * Insere chaves e atualiza índices se a chave já existir.
@@ -323,7 +322,7 @@ lchar_t *lchar_cria() {
 	lchar_t *l;
 
 	/*Testando o malloc*/
-	if(!(l = (lchar_t *)malloc(sizeof(lchar_t))))
+	if(!(l = (lchar_t*)malloc(sizeof(lchar_t))))
 		return NULL;
 
 	l->tamanho = 0;
@@ -401,7 +400,7 @@ int lchar_insere_inicio(lchar_t *l, int caractere, int index) {
 	lista_t *newLista;
 
 	/*Testando o malloc*/
-	if(!(newNodo = (nchar_l_t *)malloc(sizeof(nchar_l_t))) ||
+	if(!(newNodo = (nchar_l_t*)malloc(sizeof(nchar_l_t))) ||
 	   !(newLista = lista_cria()))
 		return 0;
 
@@ -432,7 +431,7 @@ int lchar_insere_ordenado(lchar_t *l, int caractere, int index) {
 	lista_t *newLista;
 
 	/*Testando o malloc*/
-	if(!(newNodo = (nchar_l_t *)malloc(sizeof(nchar_l_t))) ||
+	if(!(newNodo = (nchar_l_t*)malloc(sizeof(nchar_l_t))) ||
 	   !(newLista = lista_cria()))
 		return 0;
 
@@ -558,7 +557,7 @@ int nchar_insere_indice(lchar_t *l, int caractere, int index) {
  * Esta funcao eh somente para facilitar teus testes.
  * Normalmente ela nao existe nas implementacoes de um TAD lista.
  */
-void lchar_imprime(lchar_t *l) {
+void lchar_imprime(FILE *arq, lchar_t *l) {
 	nchar_l_t *NodoAtual;
 
 	NodoAtual = l->ini;
@@ -566,12 +565,17 @@ void lchar_imprime(lchar_t *l) {
 	if(lchar_vazia(l) == 0) {
 		while(NodoAtual->prox != NULL) {
 			printf("%c: ", NodoAtual->elemento);
-			lista_imprime(NodoAtual->lista);
+
+			// insere no arquivo o caractere e sua respectiva lista
+			fprintf(arq, "%lc: ", NodoAtual->elemento);
+			lista_imprime(arq, NodoAtual->lista);
+
 			NodoAtual = NodoAtual->prox;
 		}
 
 		/* Imprimindo o último elemento da lista */
 		printf("%c: ", NodoAtual->elemento);
-		lista_imprime(NodoAtual->lista);
+		fprintf(arq, "%lc: ", NodoAtual->elemento);
+		lista_imprime(arq, NodoAtual->lista);
 	}
 }
