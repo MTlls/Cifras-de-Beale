@@ -1,6 +1,6 @@
 CFLAGS = -std=c99 -Wall -g
  
-objs = cifrador.o liblista.o beale.o
+objs = cifrador.o structs.o beale.o
  
 # regra default (primeira regra)
 all: beale
@@ -9,10 +9,10 @@ all: beale
 beale: $(objs)
  
 # regras de compilação
-beale.o: cifrador.h
-cifrador.o: cifrador.c liblista.h cifrador.h
-cifrador.h: liblista.h
-liblista.o: liblista.c liblista.h
+beale.o: beale.c cifrador.h structs.c libLCifra.h
+cifrador.o: cifrador.c cifrador.h structs.c libLCifra.h
+libLCifra.h: libLista.h
+structs.o: structs.c libLCifra.h
  
 # remove arquivos temporários
 clean:

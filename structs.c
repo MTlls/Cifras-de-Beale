@@ -1,8 +1,10 @@
-#include "liblista.h"
+#include "libLista.h"
+#include "libCifra.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <wctype.h>
+#include <wchar.h>
 /*
  * Cria uma lista vazia e a retorna, se falhar retorna NULL.
  */
@@ -78,39 +80,6 @@ int lista_insere_inicio(lista_t *l, int elemento) {
 	return 1;
 }
 
-/*
- * Insere o elemento no final da lista.
- * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
- */
-int lista_insere_fim(lista_t *l, int elemento) {
-	nodo_l_t *NodoAtual;
-	nodo_l_t *NewNode;
-
-	/*Testando o malloc*/
-	if(!(NewNode = (nodo_l_t*)malloc(sizeof(nodo_l_t))))
-		return 0;
-
-	NewNode->elemento = elemento;
-	NewNode->prox = NULL;
-
-	if(lista_vazia(l) == 1) {
-		l->ini = NewNode;
-		l->tamanho++;
-		return 1;
-	} else {
-		NodoAtual = l->ini;
-
-		/*Quando NodoAtual->prox for NULL,
-		 * estaremos no último elemento da lista */
-		while(NodoAtual->prox != NULL)
-			NodoAtual = NodoAtual->prox;
-
-		NodoAtual->prox = NewNode;
-		l->tamanho++;
-	}
-	return 1;
-}
-
 /* Ordena a lista e retorna a mesma */
 
 lista_t *ordena_lista(lista_t* l) {
@@ -139,21 +108,6 @@ lista_t *ordena_lista(lista_t* l) {
 }
 
 /*
- * Insere o elemento na lista garantindo ordenacao em ordem crescente.
- * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
- */
-
-int lista_insere_ordenado(lista_t *l, int elemento) {
-	/* Para garantir isso, podemos simplesmente inserir
-	 * no final e ordenar depois */
-
-	lista_insere_fim(l, elemento);
-	l = ordena_lista(l);
-
-	return 1;
-}
-
-/*
  * Remove o elemento do inicio da lista e o retorna em 'elemento'.
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
  */
@@ -174,78 +128,6 @@ int lista_retira_inicio(lista_t *l, int *elemento) {
 	temp->prox = NULL;
 	free(temp);
 
-	return 1;
-}
-
-/*
- * Remove o elemento do final da lista e o retorna em 'elemento'.
- * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
- */
-
-int lista_retira_fim(lista_t *l, int *elemento) {
-	nodo_l_t *NodoAtual;
-
-	if(lista_vazia(l))
-		return 0;
-
-	/* Se só tem um elemento na lista, removendo-o */
-	if((l->ini)->prox == NULL) {
-		*elemento = (l->ini)->elemento;
-		l->tamanho--;
-		free(l->ini);
-		return 1;
-	}
-
-	/* Indo para o penúltimo elemento da lista */
-	NodoAtual = l->ini;
-	while((NodoAtual->prox)->prox != NULL)
-		NodoAtual = NodoAtual->prox;
-
-	/*NodoAtual aponta para o penúltimo,
-	 * logo podemos remover NodoAtual->prox */
-	*elemento = (NodoAtual->prox)->elemento;
-	free(NodoAtual->prox);
-	NodoAtual->prox = NULL;
-	l->tamanho--;
-
-	return 1;
-}
-
-/*
- * Remove o elemento 'elemento' caso ele exista na lista.
- * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
- * Se o elemento nao for encontrado na lista tambem retorna 0.
- */
-
-int lista_retira_elemento(lista_t *l, int *elemento) {
-	nodo_l_t *NodoAtual;
-	NodoAtual = l->ini;
-	int elem;
-	elem = *elemento;
-
-	/* Se o elemento não pertence a lista, retorna 0 */
-	if(lista_pertence(l, elem) == 0)
-		return 0;
-	else {
-		if(NodoAtual->elemento == elem)
-			lista_retira_inicio(l, &elem);
-		else {
-			while((NodoAtual->prox)->elemento != elem)
-				NodoAtual = NodoAtual->prox;
-
-			/* NodoAtual é o anterior do Nodo que queremos remover
-			 * Logo, podemos trabalhar com NodoAtual->prox */
-			nodo_l_t* del;
-
-			/* del é o Nodo a ser deletado */
-			del = NodoAtual->prox;
-			NodoAtual->prox = (NodoAtual->prox)->prox;
-			del->elemento = 0;
-			del->prox = NULL;
-			l->tamanho--;
-			free(del);
-		}
-	}
 	return 1;
 }
 
@@ -564,7 +446,7 @@ void lchar_imprime(FILE *arq, lchar_t *l) {
 
 	if(lchar_vazia(l) == 0) {
 		while(NodoAtual->prox != NULL) {
-			printf("%c: ", NodoAtual->elemento);
+			printf("%lc: ", NodoAtual->elemento);
 
 			// insere no arquivo o caractere e sua respectiva lista
 			fprintf(arq, "%lc: ", NodoAtual->elemento);
@@ -574,7 +456,7 @@ void lchar_imprime(FILE *arq, lchar_t *l) {
 		}
 
 		/* Imprimindo o último elemento da lista */
-		printf("%c: ", NodoAtual->elemento);
+		printf("%lc: ", NodoAtual->elemento);
 		fprintf(arq, "%lc: ", NodoAtual->elemento);
 		lista_imprime(arq, NodoAtual->lista);
 	}

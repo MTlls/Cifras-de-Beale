@@ -4,7 +4,7 @@
 #include <string.h>
 #include <wchar.h>
 
-#include "liblista.h"
+#include "libCifra.h"
 
 #ifndef _CIFRADOR_H_
 #define _CIFRADOR_H_
