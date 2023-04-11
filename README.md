@@ -75,7 +75,7 @@ Como precisamos do índice de palavras, usamos um iterador que só é incrementa
 OBS: como foi enviado um arquivo .txt que possuía acentos de exemplo como LivroCifra, o trabalho atual foi optado por trabalhar com wchar, por isso as funções fscanf() que serão apresentadas normalmente recebem  vetores de wchar.
 
 (cifrador.c - Função criaChaves(), linha 6)
-[...]
+
 	for(i = 0; fscanf(livroCifra, "%ls", palavra) != EOF; i++) {
 		caractere = palavra[0];
 		caractere = towlower(caractere);
@@ -84,7 +84,7 @@ OBS: como foi enviado um arquivo .txt que possuía acentos de exemplo como Livro
 		if(lchar_insere(listaChaves, caractere, i) == 0)
 			return 0;
 	}
-[...]
+
 
 (libLIstaChar.c - Função int lchar_insere(), linha 269)
 
