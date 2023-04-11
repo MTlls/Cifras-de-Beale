@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifndef _LIBlista_t_H
 #define _LIBlista_t_H
@@ -43,8 +44,6 @@ int lista_tamanho(lista_t *l);
  */
 int lista_insere_inicio(lista_t *l, int elemento);
 
-
-
 /*
  * Remove o elemento do inicio da lista e o retorna em 'elemento'.
  * Retorna 1 se a operacao foi bem sucedida e 0 caso contrario.
@@ -63,5 +62,10 @@ int lista_pertence(lista_t *l, int elemento);
  * Normalmente ela nao existe nas implementacoes de um TAD lista.
  */
 void lista_imprime(FILE *arq, lista_t *l);
+
+/**
+ * Função realiza a busca do n-ésimo indice da lista e o retorna.
+*/
+int lista_busca(lista_t *l, int index);
 
 #endif
