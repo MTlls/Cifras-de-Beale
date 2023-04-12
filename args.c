@@ -114,6 +114,11 @@ char *criaArqEncode(args_t *args) {
 
 	if(!(args->book = fopen(args->strBook, "r")))
 		return args->strBook;
+	else if(verificaArqVazio(args->book) == 1) {
+		erroArqVazio(args->strBook);
+		destroiArgs(args);
+		exit(1);
+	}
 
 	// Se for escolhido, cria o arquivo de chaves para ESCRITA
 	if(args->cFlag == 1) {
@@ -128,19 +133,30 @@ char *criaArqDecode(args_t *args) {
 	if(!(args->input = fopen(args->strInput, "r")))
 		return args->strInput;
 
-	if(args->bFlag == 1) {  // Se for escolhido, lê o arquivo cifra.
+	if(args->bFlag == 1) {  // Se for escolhido, lê o arquivo cifra e verifica se está vazio.
 		if(!(args->book = fopen(args->strBook, "r")))
 			return args->strBook;
-	} else  // Se for escolhido, lê o arquivo de chaves.
+		else if(verificaArqVazio(args->book) == 1) {
+			erroArqVazio(args->strBook);
+			destroiArgs(args);
+			exit(1);
+		}
+	} else {  // Se for escolhido, lê o arquivo de chaves e verifica se está vazio.
 		if(!(args->chave = fopen(args->strChave, "r")))
 			return args->strChave;
+		else if(verificaArqVazio(args->chave) == 1) {
+			erroArqVazio(args->strChave);
+			destroiArgs(args);
+			exit(1);
+		}
+	}
 
 	return NULL;
 }
 
 void verificaArgs(args_t *args) {
 	// Caso seja encode e decode simultâneo.  XOR.
-	if((args->dFlag == 1) && (args->eFlag == 1)) {
+	if((args->dFlag == args->eFlag)) {
 		destroiArgs(args);
 		simultaneo();
 	}
@@ -191,4 +207,18 @@ void verificaArgs(args_t *args) {
 			argIgual();
 		}
 	}
+}
+
+/**
+ * Função que verifica se o arquivo está vazio.
+ * Retorna 1 se estiver vazio, 0 caso contrário.
+ */
+int verificaArqVazio(FILE *arq) {
+	fseek(arq, 0, SEEK_END);
+	if(ftell(arq) == 0)
+		return 1;
+
+	rewind(arq);
+
+	return 0;
 }

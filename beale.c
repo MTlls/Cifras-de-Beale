@@ -6,20 +6,18 @@
 #include "libErro.h"
 
 int main(int argc, char **argv) {
-	clock_t tInicio, tFim;
-	double tDecorrido = 0.0;
+	// strArqErro é usado para tratamento de erro ao abrir arquivo.
 	char *strArqErro;
 	int option = 0;
-	tInicio = clock();
+
 	setlocale(LC_CTYPE, "");
 
 	args_t *args = criaArgs();
 
 	// Para customizar mensagem de erro
 	opterr = 0;
-	char optstring[13] = ":edi:m:o:c:b:";
 
-	while((option = getopt(argc, argv, optstring)) != -1) {
+	while((option = getopt(argc, argv, ":edi:m:o:c:b:")) != -1) {
 		// Opção requer argumento
 		if(option != 'e' && option != 'd' && optarg) {
 			// É seguida de outra opção, um erro que será tratado no caso ':'
@@ -84,15 +82,6 @@ int main(int argc, char **argv) {
 			exit(1);
 		}
 
-		// Verifica se o livro está vazio.
-		fseek(args->book, 0, SEEK_END);
-		if(ftell(args->book) == 0) {
-			erroArqVazio(args->strBook);
-			destroiArgs(args);
-			exit(1);
-		}
-		rewind(args->book);
-
 		fprintf(stdout, "Começando a codificação...\n");
 
 		// Todas as streams setadas, começa o processo de codificação/encode
@@ -123,8 +112,5 @@ int main(int argc, char **argv) {
 
 	// Fechamento das streams e das strings que guardam argumentos.
 	destroiArgs(args);
-	tFim = clock();
-	tDecorrido = ((double)(tFim - tInicio) / (CLOCKS_PER_SEC));
-	fprintf(stdout, "Tempo: %lf s\n", tDecorrido);
 	return 0;
 }

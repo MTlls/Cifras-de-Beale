@@ -77,8 +77,9 @@ char* criaArqDecode(args_t *args);
 void verificaArgs(args_t *args);
 
 /**
- * Função realizada caso seja enviado algum arquivo igual ao output.
- */
-void argIgual();
+ * Função que verifica se o arquivo está vazio.
+ * Retorna 1 se estiver vazio, 0 caso contrário.
+*/
+int verificaArqVazio(FILE *arq);
 
 #endif

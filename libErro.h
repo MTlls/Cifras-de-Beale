@@ -66,4 +66,9 @@ void optInvalida(int option);
  */
 void semOutput();
 
+/**
+ * Função realizada caso seja enviado algum arquivo igual ao output.
+ */
+void argIgual();
+
 #endif
