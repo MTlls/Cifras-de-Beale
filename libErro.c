@@ -56,7 +56,7 @@ void faltaOpt(int option) {
  * Dispara uma mensagem na saída de erro indicando o mesmo.
  */
 void simultaneo() {
-	fprintf(stderr, "ERRO: Operação não aceita. Não é possível satisfazer as duas opções simultaneamente.\n");
+	fprintf(stderr, "ERRO: Operação não aceita. Não é possível satisfazer as duas opções simultaneamente.\nCorrija seu -e -d ou -b e -m\n");
 	exit(1);
 }
 
@@ -88,33 +88,9 @@ void semOutput() {
 }
 
 /**
- * Função realiza o free() de cada string que possuía o nome de cada arquivo.
+ * Função realizada caso seja enviado algum arquivo igual ao output.
  */
-void liberarArgumentos(char *output, char *book, char *input, char *mensagem, char *chaves) {
-	if(output)
-		free(output);
-	if(book)
-		free(book);
-	if(input)
-		free(input);
-	if(mensagem)
-		free(mensagem);
-	if(chaves)
-		free(chaves);
-}
-
-/**
- * Função realiza o free() de cada string que possuía o nome de cada arquivo.
- */
-void fechaArquivos(FILE *book, FILE *mensagem, FILE *output, FILE *chaves, FILE *input) {
-	if(output)
-		fclose(output);
-	if(book)
-		fclose(book);
-	if(input)
-		fclose(input);
-	if(mensagem)
-		fclose(mensagem);
-	if(chaves)
-		fclose(chaves);
+void argIgual() {
+	fprintf(stderr, "ERRO: Operação não aceita. Nomes de arquivos iguais.\n");
+	exit(1);
 }

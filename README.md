@@ -6,10 +6,59 @@ Matheus Telles Batista
 
 Structs:
 
-    nchar_l_t
-	        '-> int elemento
-	        '-> struct lista *lista; 
-	        '-> struct nchar_l *prox;
+Struct args_t 
+
+
+	struct argumentos {
+	int eFlag; /* flag da opt e (encode) */
+	int dFlag; /* flag da opt d (decode) */
+	int oFlag; /* flag da opt o (MensagemCodificada/MensagemDecodificada) */
+	int bFlag; /* flag da opt b (LivroCifra) */
+	int cFlag; /* flag da opt c (ArquivoDeChaves) */
+	int mFlag; /* flag da opt m (Mensagem) */
+	int iFlag; /* flag da opt i (MensagemCodificada) */
+
+	char *strOutput;   /*string do argumento -o */
+	char *strBook;     /*string do argumento -b */
+	char *strChave;    /*string do argumento -c */
+	char *strMensagem; /*string do argumento -m */
+	char *strInput;    /*string do argumento -i */
+
+	FILE *output;   /* arquivo output  */
+	FILE *book;     /* arquivo book  */
+	FILE *chave;    /* arquivo chave  */
+	FILE *mensagem; /* arquivo mensagem  */
+	FILE *input;    /* arquivo input */
+
+	};
+	typedef struct argumentos args_t;
+
+Essa estrutura guarda todos os argumentos e arquivos necessários, é usado para inserção dos arquivos, alteração de flags e criação de streams para os arquivos.
+
+
+Caso haja erro em alguma execução, seja de qualquer tipo, é limpado da memória todas as flags, argumentos e streams.
+O projeto também verifica algumas incosistências em opções, como:
+
+-alguém tentar decodificar e codificar ao mesmo tempo;
+
+-esquecer de inserir a opção i em um decode;
+
+-esquecer de inserir a opção -m em um encode.
+
+
+Todos os casos listados estão em args.c (comentados a cada if).
+
+
+
+Struct nchar_l_t
+
+	struct nchar_l {
+		int elemento;         /* lista de numeros inteiros */
+		struct lista *lista;  /* ponteiro para a lista de indices*/
+		struct nchar_l *prox; /* ponteiro para o proximo caractere */
+	};
+	typedef struct nchar_l nchar_l_t;
+
 
 Sobre os componentes/membros:
 
@@ -31,6 +80,11 @@ d: 95 92 80 67 64 61 58 56 46 36 33 20 18 7
 
 Cada índice é usado na codificação/decodificação das mensagens.
 
+
+
+Struct lchar_t
+
+
     /**
      *Struct da lista contendo os caracteres
     */
@@ -42,17 +96,36 @@ Cada índice é usado na codificação/decodificação das mensagens.
 
 Essa struct lchar_t foi usada para guardar índices ({nodo, nodo, nodo, ...}), uma lista simples ligada;
 
-    Nodo_l_t:
-        '-> int elemento
-        '-> struct nodo_l_t *prox
+
+
+Struct nodo_l_t
+
+	struct nodo_l {
+		int elemento;        /* lista de numeros inteiros */
+		struct nodo_l *prox; /* ponteiro para o proximo   */
+	};
+	typedef struct nodo_l nodo_l_t;
+
 
 Essa struct nodo_l_t foi usada para os próprios índices, um nodo simples de uma lista simples ligada;
 
-    lista_t :
-        '-> nodo_l_t *ini
-        '-> int tamanho
+
+
+
+Struct lista_t
+
+	struct lista {
+		nodo_l_t *ini; /* ponteiro para o inicio da lista */
+		int tamanho;   /* numero de elementos na lista    */
+	};
+	typedef struct lista lista_t;
 
 Lista básica para concatenar elementos em sequência, sendo o ini o início e o tamanho autoexplicativo.
+
+
+
+
+Struct nodo_index_t
 
     /**
     * Struct do nodo índice, cada nodo contém um índice e um respectivo caractere,
@@ -186,11 +259,14 @@ Exemplo: A cifra
 decodificada se torna: "sunshine@ "
 
 Pelo livro cifra:
-	Monta-se uma árvore rubro negra, criando nodos_index_t a cada passe de palavra, até o final do livro cifra.
-    
-Como é preciso capturar os índices e verificar o seu respectivo caractere, uma solução rápida seria concatenar as listas e procurar o índice, mas para livros cifra com quantidades grandes de palavras isso não é uma opção razoável em termos de processamento.
 
-Foi optado a implementação de uma árvore red-black que possui complexidade O(log n), e é autobalanceável, que facilita a inserção rápida.
+
+Como é preciso capturar os índices e verificar o seu respectivo caractere, uma solução rápida seria concatenar as listas e procurar o índice, mas para livros cifra com quantidades grandes de palavras isso não é uma opção razoável em termos de processamento. Foi optado no projeto a implementação de uma árvore red-black que possui complexidade O(log n), e é autobalanceável, que facilita a inserção rápida.
+
+
+Então primeiro monta-se uma árvore rubro negra, criando nodos_index_t a cada passe de palavra, até o final do livro cifra.
+
+
 
 A criação da árvore red-black usando o um livro cifra ocorre pelo seguinte algorítmo em C:
 
@@ -204,9 +280,6 @@ função decode(livroCifra, input, output, chaves), linha 118
 
 	
 Cria-se a árvore com todos os índices e caracteres e a partir deste ponto apenas é necessário fazer a busca do índice encontrado no livro.
-
-
-
 
 
 Pelo arquivo de chaves: 

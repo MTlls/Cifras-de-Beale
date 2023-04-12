@@ -66,13 +66,4 @@ void optInvalida(int option);
  */
 void semOutput();
 
-/**
- * Função realiza o free() de cada string que possuía o nome de cada arquivo.
- */
-void liberarArgumentos(char *output, char *book, char *input, char *mensagem, char *chaves);
-
-/**
- * Função realiza o fclose() de cada arquivo que foi aberto.
- */
-void fechaArquivos(FILE *book, FILE *mensagem, FILE *output, FILE *chaves, FILE *input);
 #endif
