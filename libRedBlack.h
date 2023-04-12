@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef _LIBRedBLack_t_H
-#define _LIBRedBLack_t_H
+#ifndef _LIBRedBlack_t_H
+#define _LIBRedBlack_t_H
+
 /**
  * Struct do nodo índice, cada nodo contém um índice e um respectivo caractere,
  * além disso, o nodo participa de uma árvore red-black, tendo a cor vermelha(1) ou preta(0).
@@ -48,31 +49,6 @@ void equilibra_redblack(nodo_index_t **raiz, nodo_index_t *no);
 /* Segue casos de balanceamento da árvore red-black */
 
 /**
- * 1° CASO DE BALANCEAMENTO: nodo inserido, pai e tio são vermelhos:
- *
- * Função troca a cor do avo, pai e tio.
- */
-void caso1(nodo_index_t **raiz, nodo_index_t *no);
-
-/**
- * 2° CASO DE BALANCEAMENTO:zig-zag
- * Nodo inserido e tio são filhos com o mesmo lado.
- * Sendo as cores do pai e do filho vermelhas e a do tio é preto:
- *
- * Função realiza a rotação do pai.
- */
-void caso2(nodo_index_t *raiz, nodo_index_t *no);
-
-/**
- * 3° CASO DE BALANCEAMENTO: zig-zig
- * Nodo inserido e tio são filhos de lado contrário.
- * Sendo as cores do pai e do filho vermelhas e a do tio é preto:
- *
- * Função realiza a rotação do pai.
- */
-void caso3(nodo_index_t *raiz, nodo_index_t *no);
-
-/**
  * Função que rotaciona o nó na direção esquerda.
  */
 
@@ -83,7 +59,9 @@ void rotacaoEsq(nodo_index_t **raiz, nodo_index_t *no);
  */
 void rotacaoDir(nodo_index_t **raiz, nodo_index_t *no);
 
-// Função para imprimir a arvore e suas cores.
+/**
+ *  Função para imprimir a arvore e suas cores.
+ * */
 void inorder(nodo_index_t *no);
 
 /**
