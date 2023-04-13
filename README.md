@@ -150,7 +150,7 @@ Escolhido pois possui uma complexidade baixa e pior caso = melhor caso, além de
 Encoder/Codificador:
 
     ./beale  -e  -b LivroCifra -m MensagemOriginal -o MensagemCodificada 
-    ./beale  -e  -b LivroCifra -m MensagemOriginal -o MensagemCodificada -c ArquivoChaves
+	./beale  -e  -b LivroCifra -m MensagemOriginal -o MensagemCodificada -c ArquivoDeChaves 
 
 O funcionamento do decifrador segue o seguinte raciocínio:
 
