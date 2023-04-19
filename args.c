@@ -5,8 +5,6 @@
 
 #include "libErro.h"
 
-#define EXTENSAO ".ascii"
-
 args_t *criaArgs() {
 	args_t *args;
 
@@ -86,24 +84,24 @@ args_t *destroiArgs(args_t *args) {
 void criaNomeArq(args_t *args, char option, char *optarg) {
 	switch(option) {
 	case 'm':
-		args->strMensagem = (char *)malloc(strlen(optarg) + strlen(EXTENSAO) + 1);
-		strcat(strcpy(args->strMensagem, optarg), EXTENSAO);
+		args->strMensagem = (char *)malloc(strlen(optarg) + 1);
+		strcpy(args->strMensagem, optarg);
 		break;
 	case 'i':
-		args->strInput = (char *)malloc(strlen(optarg) + strlen(EXTENSAO) + 1);
-		strcat(strcpy(args->strInput, optarg), EXTENSAO);
+		args->strInput = (char *)malloc(strlen(optarg) + 1);
+		strcpy(args->strInput, optarg);
 		break;
 	case 'b':
-		args->strBook = (char *)malloc(strlen(optarg) + strlen(EXTENSAO) + 1);
-		strcat(strcpy(args->strBook, optarg), EXTENSAO);
+		args->strBook = (char *)malloc(strlen(optarg) + 1);
+		strcpy(args->strBook, optarg);
 		break;
 	case 'o':
-		args->strOutput = (char *)malloc(strlen(optarg) + strlen(EXTENSAO) + 1);
-		strcat(strcpy(args->strOutput, optarg), EXTENSAO);
+		args->strOutput = (char *)malloc(strlen(optarg) + 1);
+		strcpy(args->strOutput, optarg);
 		break;
 	case 'c':
-		args->strChave = (char *)malloc(strlen(optarg) + strlen(EXTENSAO) + 1);
-		strcat(strcpy(args->strChave, optarg), EXTENSAO);
+		args->strChave = (char *)malloc(strlen(optarg) + 1);
+		strcpy(args->strChave, optarg);
 		break;
 	}
 }
