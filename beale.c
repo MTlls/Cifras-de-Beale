@@ -74,6 +74,12 @@ int main(int argc, char **argv) {
 		exit(1);
 	}
 
+	// Avisa os casos especiais
+	printf("\nAVISO: Os casos especiais são -1, -2 e -3:\n"
+			"-1: Espaço encontrado\n"
+			"-2: Valor não consta no livro cifra (Trocado por @ na decodificação)\n"
+			"-3: Quebra de linha.\n\n");
+
 	// Caso a opção seja encode (-e)
 	if(args->eFlag == 1) {
 		if((strArqErro = criaArqEncode(args))) {

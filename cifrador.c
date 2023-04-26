@@ -8,7 +8,7 @@ int criaChaves(FILE *livroCifra, lchar_t *listaChaves) {
 	wchar_t palavra[1024];
 	int caractere, i;
 
-	// lê até encontrar ' ', '\t' ou  '\n'
+	// Lê até encontrar palavra por palavra e captura o primeiro caractere
 	for(i = 0; fscanf(livroCifra, "%ls", palavra) != EOF; i++) {
 		caractere = palavra[0];
 		caractere = towlower(caractere);
@@ -27,6 +27,9 @@ int trocar(FILE *mensagem, FILE *output, lchar_t *l) {
 	wint_t caractere;
 	int i = 0, index;
 
+	// Flag que indica se há algum caractere no texto original que não está na lista de chaves
+	int nullCharFlag = 0;
+
 	// lê até encontrar ' ', '\t' ou  '\n'
 	while((caractere = towlower(fgetwc(mensagem))) != EOF) {
 		// Se for quebra de linha, índice = -3
@@ -44,6 +47,7 @@ int trocar(FILE *mensagem, FILE *output, lchar_t *l) {
 			if(!aux) {
 				// Caso o livro cifra não cubra todos os casos de caracteres, se insere um -2 no lugar do caractere.
 				index = -2;
+				nullCharFlag = 1;
 			} else {
 				index = lista_busca(aux->lista, rand() % (aux->lista->tamanho));
 			}
@@ -52,6 +56,9 @@ int trocar(FILE *mensagem, FILE *output, lchar_t *l) {
 		fprintf(output, "%d ", index);
 	}
 
+	// Se não há um caractere do livro cifra que represente algum caractere da mensagem, haverá um aviso indicando isso.
+	if(nullCharFlag == 1)
+		printf("AVISO: Há caracteres no texto original que não foram achados no texto codificado. Há -2 no output.\n");
 	return 1;
 }
 
@@ -90,6 +97,7 @@ FILE *decode(FILE *livroCifra, FILE *input, FILE *output, FILE *chaves) {
 	nodo_index_t *raiz = NULL;
 	int valor;
 	int caractere = 0, i = 0;
+	int charNullFlag  = 0;
 
 	// A árvore irá usar -3 como \n
 	insere_redblack(&raiz, 10, -3);
@@ -124,9 +132,16 @@ FILE *decode(FILE *livroCifra, FILE *input, FILE *output, FILE *chaves) {
 	}
 
 	// Captura-se os valores do arquivo encriptado e escreve seu respectivo caractere no output a cada iteração.
-	while(fscanf(input, "%d", &valor) != EOF)
+	while(fscanf(input, "%d", &valor) != EOF){
+		if(valor == -2)
+			charNullFlag = 1;
 		fprintf(output, "%lc", srchIndex(raiz, valor));
+	}
 
+	// Avisa se há caracteres que não foram encontrados e substituídos no output
+	if(charNullFlag == 1){
+		printf("\nAVISO: Há caracteres no texto original que não foram achados no texto codificado. Há '@' no output.\n\n");
+	}
 	destroi(raiz);
 
 	return output;
