@@ -41,4 +41,4 @@ clean:
 # remove tudo o que não for o código-fonte
 purge: clean
 	@echo "Limpando tudo que não seja código-fonte..."
-	-rm -f beale *.[^c,h]*
+	-rm -f beale *.[^c,h, md]*
